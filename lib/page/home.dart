@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
+
 import 'package:todo_application/model/project_model.dart';
+import 'package:todo_application/model/task_model.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -12,6 +14,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   List<ProjectModel> listProject = ProjectModel.getAllProject();
+  List<TaskModel> listTask = TaskModel.getAllTask();
   DateTime now = DateTime.now();
   @override
   Widget build(BuildContext context) {
@@ -82,6 +85,68 @@ class _HomePageState extends State<HomePage> {
                           ),
                         ),
                       ),
+                      const SizedBox(height: 5),
+                      Divider(
+                        color: Colors.amber,
+                        thickness: 3,
+                      ),
+                      IntrinsicHeight(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Text(
+                                  "5",
+                                  style: GoogleFonts.montserrat(
+                                    textStyle: TextStyle(
+                                      fontWeight: FontWeight.w700,
+                                      fontSize: 25,
+                                    ),
+                                  ),
+                                ),
+                                Text(
+                                  "Total Projects",
+                                  style: GoogleFonts.montserrat(
+                                    textStyle: TextStyle(
+                                      fontWeight: FontWeight.w400,
+                                      fontSize: 10,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            VerticalDivider(
+                              color: Colors.amber,
+                              thickness: 3,
+                            ),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Text(
+                                  "5",
+                                  style: GoogleFonts.montserrat(
+                                    textStyle: TextStyle(
+                                      fontWeight: FontWeight.w700,
+                                      fontSize: 25,
+                                    ),
+                                  ),
+                                ),
+                                Text(
+                                  "Total Tasks",
+                                  style: GoogleFonts.montserrat(
+                                    textStyle: TextStyle(
+                                      fontWeight: FontWeight.w400,
+                                      fontSize: 10,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      )
                     ],
                   ),
                 ),
@@ -91,7 +156,7 @@ class _HomePageState extends State<HomePage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    "Projects",
+                    "My Projects",
                     style: GoogleFonts.montserrat(
                       textStyle: TextStyle(
                         fontWeight: FontWeight.w700,
@@ -185,7 +250,93 @@ class _HomePageState extends State<HomePage> {
                         separatorBuilder: (context, index) =>
                             const SizedBox(width: 25),
                         itemCount: listProject.length),
-                  )
+                  ),
+                  const SizedBox(height: 30),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        "My Tasks",
+                        style: GoogleFonts.montserrat(
+                          textStyle: TextStyle(
+                            fontWeight: FontWeight.w700,
+                            fontSize: 25,
+                          ),
+                        ),
+                      ),
+                      IconButton(
+                          onPressed: () {},
+                          icon: Icon(
+                            Icons.add,
+                            color: Color(0xFFF57D1F),
+                          ))
+                    ],
+                  ),
+                  const SizedBox(height: 20),
+                  ListView.separated(
+                      shrinkWrap: true,
+                      physics: NeverScrollableScrollPhysics(),
+                      itemBuilder: (context, index) {
+                        return Container(
+                          width: MediaQuery.of(context).size.width,
+                          decoration: BoxDecoration(
+                              color: listTask[index].isDone
+                                  ? Color(0xFFEEF5FF)
+                                  : Colors.white,
+                              border: Border.all(color: Color(0xFF0077b6)),
+                              borderRadius: BorderRadius.circular(10),
+                              boxShadow: const [
+                                BoxShadow(
+                                    color: Color(0xFFc5c5c5),
+                                    offset: Offset(0, 3),
+                                    blurRadius: 3,
+                                    spreadRadius: 0)
+                              ]),
+                          child: CheckboxListTile(
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(
+                                    10.0)), // Circle Checkbox
+                            activeColor: Color(0xFFffad47),
+                            checkboxShape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(5)),
+                            title: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  listTask[index].name,
+                                  style: GoogleFonts.montserrat(
+                                    textStyle: TextStyle(
+                                      fontWeight: FontWeight.w700,
+                                      fontSize: 16,
+                                    ),
+                                  ),
+                                ),
+                                Text(
+                                  listTask[index].deadline,
+                                  style: GoogleFonts.montserrat(
+                                    textStyle: TextStyle(
+                                      fontWeight: FontWeight.w400,
+                                      fontSize: 10,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+
+                            value: listTask[index].isDone,
+                            onChanged: (val) {
+                              setState(() {
+                                listTask[index].isDone = val!;
+                              });
+                            },
+                          ),
+                        );
+                      },
+                      separatorBuilder: (context, index) =>
+                          const SizedBox(height: 15),
+                      itemCount: listTask.length),
+                  const SizedBox(height: 20),
                 ],
               )
             ],

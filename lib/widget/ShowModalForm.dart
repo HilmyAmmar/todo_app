@@ -20,9 +20,9 @@ class ShowFormModal extends StatefulWidget {
 class _showFormModalState extends State<ShowFormModal> {
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _dateController = TextEditingController();
+  final TextEditingController _categoryController = TextEditingController();
 
   late Box<TaskModel> taskBox;
-
   @override
   void initState() {
     super.initState();
@@ -199,7 +199,7 @@ class _showFormModalState extends State<ShowFormModal> {
                                         CrossAxisAlignment.start,
                                     children: [
                                       Text(
-                                        "Priority",
+                                        "Category",
                                         style: GoogleFonts.montserrat(
                                           textStyle: const TextStyle(
                                             fontWeight: FontWeight.w400,
@@ -212,7 +212,7 @@ class _showFormModalState extends State<ShowFormModal> {
                                           isExpanded: true,
                                           value: selectedCategory,
                                           decoration: InputDecoration(
-                                            hintText: 'Priority',
+                                            hintText: 'Category',
                                             hintStyle: const TextStyle(
                                                 color: Color(0xffDDDADA),
                                                 fontSize: 14),
@@ -295,7 +295,7 @@ class _showFormModalState extends State<ShowFormModal> {
                                       );
 
                                       taskBox.add(newTask);
-
+                                      reset();
                                       Navigator.of(context).pop();
                                     }
                                   },
@@ -324,6 +324,15 @@ class _showFormModalState extends State<ShowFormModal> {
           FontAwesomeIcons.add,
           color: Color(0xFFff8800),
         ));
+  }
+
+  reset() {
+    widget._formKey.currentState?.reset();
+    _titleController.clear();
+    _dateController.clear();
+    setState(() {
+      selectedCategory = null;
+    });
   }
 
   @override

@@ -17,7 +17,8 @@ dependencies:
   hive_flutter: ^1.1.0
   hive_generator: ^1.1.3
   path_provider: ^2.1.2
-  
+  flutter_profile_picture: ^2.0.0
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

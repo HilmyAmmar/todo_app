@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:hive_flutter/adapters.dart';
 import 'package:intl/intl.dart';
 
 import 'package:todo_application/model/project_model.dart';
@@ -14,8 +16,16 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  late Box<TaskModel> taskBox;
+
+  @override
+  void initState() {
+    super.initState();
+    taskBox = Hive.box<TaskModel>('tasks');
+  }
+
   List<ProjectModel> listProject = ProjectModel.getAllProject();
-  List<TaskModel> listTask = TaskModel.getAllTask();
+
   DateTime now = DateTime.now();
 
   final _formKey = GlobalKey<FormState>();
@@ -93,8 +103,8 @@ class _HomePageState extends State<HomePage> {
                       ),
                       const SizedBox(height: 5),
                       const Divider(
-                        color: Colors.amber,
-                        thickness: 3,
+                        color: Color(0x4Dffc300),
+                        thickness: 2,
                       ),
                       IntrinsicHeight(
                         child: Row(
@@ -124,14 +134,14 @@ class _HomePageState extends State<HomePage> {
                               ],
                             ),
                             const VerticalDivider(
-                              color: Colors.amber,
-                              thickness: 3,
+                              color: Color(0x4Dffc300),
+                              thickness: 2,
                             ),
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
                                 Text(
-                                  "5",
+                                  taskBox.length.toString(),
                                   style: GoogleFonts.montserrat(
                                     textStyle: const TextStyle(
                                       fontWeight: FontWeight.w700,
@@ -166,7 +176,7 @@ class _HomePageState extends State<HomePage> {
                     style: GoogleFonts.montserrat(
                       textStyle: const TextStyle(
                         fontWeight: FontWeight.w700,
-                        fontSize: 25,
+                        fontSize: 20,
                       ),
                     ),
                   ),
@@ -266,7 +276,7 @@ class _HomePageState extends State<HomePage> {
                         style: GoogleFonts.montserrat(
                           textStyle: const TextStyle(
                             fontWeight: FontWeight.w700,
-                            fontSize: 25,
+                            fontSize: 20,
                           ),
                         ),
                       ),
@@ -274,68 +284,91 @@ class _HomePageState extends State<HomePage> {
                     ],
                   ),
                   const SizedBox(height: 20),
-                  ListView.separated(
-                      shrinkWrap: true,
-                      physics: const NeverScrollableScrollPhysics(),
-                      itemBuilder: (context, index) {
-                        return Container(
-                          width: MediaQuery.of(context).size.width,
-                          decoration: BoxDecoration(
-                              color: listTask[index].isDone
+                  ValueListenableBuilder(
+                    valueListenable: Hive.box<TaskModel>('tasks').listenable(),
+                    builder: (BuildContext context, Box<TaskModel> taskBox,
+                        Widget? child) {
+                      return ListView.separated(
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        itemBuilder: (context, index) {
+                          TaskModel task = taskBox.getAt(index)!;
+                          return Container(
+                            width: MediaQuery.of(context).size.width,
+                            decoration: BoxDecoration(
+                              color: task.isDone
                                   ? const Color(0xFFEEF5FF)
                                   : Colors.white,
                               border:
-                                  Border.all(color: const Color(0xFF0077b6)),
+                                  Border.all(color: const Color(0x4D0077b6)),
                               borderRadius: BorderRadius.circular(10),
                               boxShadow: const [
                                 BoxShadow(
-                                    color: Color(0xFFc5c5c5),
-                                    offset: Offset(0, 3),
-                                    blurRadius: 3,
-                                    spreadRadius: 0)
-                              ]),
-                          child: CheckboxListTile(
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10.0)),
-                            activeColor: const Color(0xFFffad47),
-                            checkboxShape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(5)),
-                            title: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(
-                                  listTask[index].name,
-                                  style: GoogleFonts.montserrat(
-                                    textStyle: const TextStyle(
-                                      fontWeight: FontWeight.w700,
-                                      fontSize: 16,
-                                    ),
-                                  ),
-                                ),
-                                Text(
-                                  listTask[index].deadline,
-                                  style: GoogleFonts.montserrat(
-                                    textStyle: const TextStyle(
-                                      fontWeight: FontWeight.w400,
-                                      fontSize: 10,
-                                    ),
-                                  ),
+                                  color: Color(0xFFc5c5c5),
+                                  offset: Offset(0, 3),
+                                  blurRadius: 3,
+                                  spreadRadius: 0,
                                 ),
                               ],
                             ),
-                            value: listTask[index].isDone,
-                            onChanged: (val) {
-                              setState(() {
-                                listTask[index].isDone = val!;
-                              });
-                            },
-                          ),
-                        );
-                      },
-                      separatorBuilder: (context, index) =>
-                          const SizedBox(height: 15),
-                      itemCount: listTask.length),
+                            child: CheckboxListTile(
+                              contentPadding:
+                                  EdgeInsets.symmetric(horizontal: 6),
+                              controlAffinity: ListTileControlAffinity.leading,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10.0),
+                              ),
+                              activeColor: const Color(0xFFffad47),
+                              checkboxShape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(5),
+                              ),
+                              title: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    task.title,
+                                    style: GoogleFonts.montserrat(
+                                      textStyle: const TextStyle(
+                                        fontWeight: FontWeight.w700,
+                                        fontSize: 16,
+                                      ),
+                                    ),
+                                  ),
+                                  Text(
+                                    DateFormat('yyyy-MM-dd').format(task.date),
+                                    style: GoogleFonts.montserrat(
+                                      textStyle: const TextStyle(
+                                        fontWeight: FontWeight.w400,
+                                        fontSize: 10,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              secondary: Container(
+                                child: IconButton(
+                                  icon: FaIcon(FontAwesomeIcons.trash),
+                                  onPressed: () {
+                                    taskBox.deleteAt(index);
+                                  },
+                                ),
+                              ),
+                              value: task.isDone,
+                              onChanged: (val) {
+                                setState(() {
+                                  task.isDone = val!;
+                                });
+                              },
+                            ),
+                          );
+                        },
+                        separatorBuilder: (context, index) =>
+                            const SizedBox(height: 15),
+                        itemCount: taskBox.length,
+                      );
+                    },
+                  ),
                   const SizedBox(height: 20),
                 ],
               )

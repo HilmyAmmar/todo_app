@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
-import 'package:todo_application/page/home.dart';
+import 'package:hive/hive.dart';
+import 'package:todo_application/model/task_model.dart';
 
 class ShowFormModal extends StatefulWidget {
   const ShowFormModal({
@@ -16,9 +18,20 @@ class ShowFormModal extends StatefulWidget {
 }
 
 class _showFormModalState extends State<ShowFormModal> {
+  final TextEditingController _titleController = TextEditingController();
   final TextEditingController _dateController = TextEditingController();
-  String? selectedPriority;
-  final List<String> priorityList = ['High', 'Low'];
+
+  late Box<TaskModel> taskBox;
+
+  @override
+  void initState() {
+    super.initState();
+    taskBox = Hive.box<TaskModel>('tasks');
+  }
+
+  String? selectedCategory;
+  final List<String> categoryList = ['Priority', 'Daily'];
+
   Future<void> _selectDate(BuildContext context) async {
     final DateTime? pickedDate = await showDatePicker(
       context: context,
@@ -78,8 +91,9 @@ class _showFormModalState extends State<ShowFormModal> {
                             ),
                             const SizedBox(height: 10),
                             TextFormField(
+                              controller: _titleController,
                               decoration: InputDecoration(
-                                  hintText: 'Name',
+                                  hintText: 'Title',
                                   hintStyle: const TextStyle(
                                       color: Color(0xffDDDADA), fontSize: 14),
                                   filled: true,
@@ -196,6 +210,7 @@ class _showFormModalState extends State<ShowFormModal> {
                                       const SizedBox(height: 10),
                                       DropdownButtonFormField(
                                           isExpanded: true,
+                                          value: selectedCategory,
                                           decoration: InputDecoration(
                                             hintText: 'Priority',
                                             hintStyle: const TextStyle(
@@ -235,7 +250,7 @@ class _showFormModalState extends State<ShowFormModal> {
                                               borderSide: BorderSide.none,
                                             ),
                                           ),
-                                          items: priorityList
+                                          items: categoryList
                                               .map((item) =>
                                                   DropdownMenuItem<String>(
                                                     value: item,
@@ -249,14 +264,14 @@ class _showFormModalState extends State<ShowFormModal> {
                                               .toList(),
                                           validator: (value) {
                                             if (value == null) {
-                                              return 'Please select gender.';
+                                              return 'Please select category.';
                                             }
                                             return null;
                                           },
                                           onChanged: (value) {
                                             setState(() {
-                                              selectedPriority =
-                                                  value.toString();
+                                              selectedCategory =
+                                                  value as String?;
                                             });
                                           }),
                                     ],
@@ -268,7 +283,22 @@ class _showFormModalState extends State<ShowFormModal> {
                             Align(
                               alignment: Alignment.center,
                               child: ElevatedButton(
-                                  onPressed: () {},
+                                  onPressed: () {
+                                    if (widget._formKey.currentState!
+                                        .validate()) {
+                                      final newTask = TaskModel(
+                                        title: _titleController.text,
+                                        date: DateTime.parse(
+                                            _dateController.text),
+                                        isDone: false,
+                                        category: selectedCategory!,
+                                      );
+
+                                      taskBox.add(newTask);
+
+                                      Navigator.of(context).pop();
+                                    }
+                                  },
                                   style: ElevatedButton.styleFrom(
                                       padding: EdgeInsets.symmetric(
                                           vertical: 16, horizontal: 100),
@@ -290,15 +320,16 @@ class _showFormModalState extends State<ShowFormModal> {
                 );
               });
         },
-        icon: const Icon(
-          Icons.add,
-          color: Color(0xFFF57D1F),
+        icon: FaIcon(
+          FontAwesomeIcons.add,
+          color: Color(0xFFff8800),
         ));
   }
 
   @override
   void dispose() {
     _dateController.dispose();
+    _titleController.dispose();
     super.dispose();
   }
 }

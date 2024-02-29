@@ -1,42 +1,23 @@
+import 'package:hive/hive.dart';
+part 'task_model.g.dart';
+
+@HiveType(typeId: 0)
 class TaskModel {
-  int taskId;
-  String name;
-  String deadline;
+  @HiveField(0)
+  String title;
+
+  @HiveField(1)
+  DateTime date;
+
+  @HiveField(2)
   bool isDone;
 
+  @HiveField(3)
+  String category;
+
   TaskModel(
-      {required this.taskId,
-      required this.name,
-      required this.deadline,
-      required this.isDone});
-
-  static List<TaskModel> getAllTask() {
-    List<TaskModel> allTask = [];
-
-    allTask.add(TaskModel(
-        taskId: 1,
-        name: "Go to gym",
-        deadline: "Mon, 7 February",
-        isDone: false));
-
-    allTask.add(TaskModel(
-        taskId: 2,
-        name: "Complete homework",
-        deadline: "Tue, 8 February",
-        isDone: false));
-
-    allTask.add(TaskModel(
-        taskId: 3,
-        name: "Attend meeting",
-        deadline: "Wed, 9 February",
-        isDone: true));
-
-    allTask.add(TaskModel(
-        taskId: 3,
-        name: "Attend meeting",
-        deadline: "Wed, 9 February",
-        isDone: true));
-
-    return allTask;
-  }
+      {required this.title,
+      required this.date,
+      required this.isDone,
+      required this.category});
 }

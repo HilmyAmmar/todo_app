@@ -3,6 +3,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:intl/intl.dart';
+import 'package:percent_indicator/linear_percent_indicator.dart';
 
 import 'package:todo_application/model/project_model.dart';
 import 'package:todo_application/model/task_model.dart';
@@ -39,7 +40,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xFFffba42),
+      backgroundColor: const Color(0xFFffba42),
       appBar: AppBar(
         toolbarHeight: MediaQuery.of(context).size.height * 0.15,
         title: Padding(
@@ -70,19 +71,21 @@ class _HomePageState extends State<HomePage> {
         elevation: 0,
         scrolledUnderElevation: 0,
         bottomOpacity: 0,
-        backgroundColor: Color(0xFFffba42),
+        backgroundColor: const Color(0xFFffba42),
         actions: [
           Padding(
             padding: const EdgeInsets.only(right: 16),
             child: Container(
               decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: Color(0X4000537a),
-                  border: Border.all(color: Color(0x6600537a))),
+                  color: const Color(0X4000537a),
+                  border: Border.all(color: const Color(0x6600537a))),
               child: IconButton(
                   onPressed: () {
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => MyProfile()));
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const MyProfile()));
                   },
                   icon: const Icon(
                     Icons.person,
@@ -97,7 +100,7 @@ class _HomePageState extends State<HomePage> {
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 30),
           constraints: BoxConstraints(
               minHeight: MediaQuery.of(context).size.height * 0.85),
-          decoration: BoxDecoration(
+          decoration: const BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.only(
               topLeft: Radius.circular(30),
@@ -163,7 +166,9 @@ class _HomePageState extends State<HomePage> {
                             width: MediaQuery.of(context).size.width * 0.7,
                             height: MediaQuery.of(context).size.height * 0.2,
                             decoration: BoxDecoration(
-                              color: const Color(0xFF00537a),
+                              color: (project.id % 2 == 1)
+                                  ? const Color(0xFF00537a)
+                                  : const Color(0xFFffba42),
                               borderRadius: BorderRadius.circular(20),
                               boxShadow: const [
                                 BoxShadow(
@@ -185,10 +190,12 @@ class _HomePageState extends State<HomePage> {
                                     child: Text(
                                       project.title,
                                       style: GoogleFonts.montserrat(
-                                        textStyle: const TextStyle(
+                                        textStyle: TextStyle(
                                           fontWeight: FontWeight.w700,
                                           fontSize: 20,
-                                          color: Color(0xFFDFD4F8),
+                                          color: (project.id % 2 == 1)
+                                              ? Colors.white
+                                              : const Color(0xFF0b1e33),
                                         ),
                                       ),
                                     ),
@@ -211,27 +218,68 @@ class _HomePageState extends State<HomePage> {
                                             DateFormat('yyyy-MM-dd')
                                                 .format(project.dueDate),
                                             style: GoogleFonts.montserrat(
-                                              textStyle: const TextStyle(
+                                              textStyle: TextStyle(
                                                 fontWeight: FontWeight.w700,
                                                 fontSize: 14,
-                                                color: Color(0xFFDFD4F8),
+                                                color: (project.id % 2 == 1)
+                                                    ? Colors.white
+                                                    : const Color(0xFF0b1e33),
                                               ),
                                             ),
                                           ),
                                         ],
                                       ),
-                                      Text(
-                                        "${project.completedTask}/${project.totalTask}",
-                                        style: GoogleFonts.montserrat(
-                                          textStyle: const TextStyle(
-                                            fontWeight: FontWeight.w700,
-                                            fontSize: 14,
-                                            color: Color(0xFFDFD4F8),
+                                      if (project.completedTask != null)
+                                        Container(
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 8, vertical: 4),
+                                          decoration: BoxDecoration(
+                                              color: (project.id % 2 == 1)
+                                                  ? const Color(0xFFffba42)
+                                                  : const Color(0xFF00537a),
+                                              borderRadius:
+                                                  BorderRadius.circular(15)),
+                                          child: Text(
+                                            "In Progress",
+                                            style: GoogleFonts.montserrat(
+                                              textStyle: TextStyle(
+                                                fontWeight: FontWeight.w700,
+                                                fontSize: 8,
+                                                color: (project.id % 2 == 1)
+                                                    ? const Color(0xFF00537a)
+                                                    : const Color(0xFFffba42),
+                                              ),
+                                            ),
                                           ),
                                         ),
-                                      )
                                     ],
-                                  )
+                                  ),
+                                  const SizedBox(height: 5),
+                                  LinearPercentIndicator(
+                                    animation: true,
+                                    lineHeight: 8,
+                                    animationDuration: 2000,
+                                    percent: project.totalTask == null
+                                        ? 0
+                                        : project.completedTask /
+                                            project.totalTask,
+                                    barRadius: const Radius.circular(20),
+                                    progressColor: (project.id % 2 == 1)
+                                        ? const Color(0xFFffba42)
+                                        : const Color(0xFF00537a),
+                                    trailing: Text(
+                                      "${project.completedTask}/${project.totalTask}",
+                                      style: GoogleFonts.montserrat(
+                                        textStyle: TextStyle(
+                                          fontWeight: FontWeight.w700,
+                                          fontSize: 14,
+                                          color: (project.id % 2 == 1)
+                                              ? const Color(0xFFDFD4F8)
+                                              : const Color(0xFF0b1e33),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
                                 ],
                               ),
                             ),
@@ -281,7 +329,7 @@ class _HomePageState extends State<HomePage> {
                   }
                   return ListView.separated(
                     shrinkWrap: true,
-                    physics: NeverScrollableScrollPhysics(),
+                    physics: const NeverScrollableScrollPhysics(),
                     itemBuilder: (context, index) {
                       TaskModel task = taskBox.getAt(index)!;
                       return Container(
@@ -302,7 +350,8 @@ class _HomePageState extends State<HomePage> {
                           ],
                         ),
                         child: CheckboxListTile(
-                          contentPadding: EdgeInsets.symmetric(horizontal: 6),
+                          contentPadding:
+                              const EdgeInsets.symmetric(horizontal: 4),
                           controlAffinity: ListTileControlAffinity.leading,
                           activeColor: const Color(0xFFffad47),
                           checkboxShape: RoundedRectangleBorder(
@@ -315,15 +364,17 @@ class _HomePageState extends State<HomePage> {
                               Row(
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
-                                  Text(
-                                    task.title,
-                                    style: GoogleFonts.montserrat(
-                                      textStyle: TextStyle(
-                                          fontWeight: FontWeight.w700,
-                                          fontSize: 16,
-                                          decoration: task.isDone
-                                              ? TextDecoration.lineThrough
-                                              : TextDecoration.none),
+                                  Expanded(
+                                    child: Text(
+                                      task.title,
+                                      style: GoogleFonts.montserrat(
+                                        textStyle: TextStyle(
+                                            fontWeight: FontWeight.w700,
+                                            fontSize: 16,
+                                            decoration: task.isDone
+                                                ? TextDecoration.lineThrough
+                                                : TextDecoration.none),
+                                      ),
                                     ),
                                   ),
                                   Container(
@@ -331,8 +382,8 @@ class _HomePageState extends State<HomePage> {
                                     padding: const EdgeInsets.all(5),
                                     decoration: BoxDecoration(
                                         color: task.category == "Priority"
-                                            ? Color(0xFFf5a201)
-                                            : Color(0xB3ffba42),
+                                            ? const Color(0xFFf5a201)
+                                            : const Color(0xB3ffba42),
                                         borderRadius:
                                             BorderRadius.circular(15)),
                                     child: Text(
@@ -358,13 +409,11 @@ class _HomePageState extends State<HomePage> {
                               ),
                             ],
                           ),
-                          secondary: Container(
-                            child: IconButton(
-                              icon: FaIcon(FontAwesomeIcons.trash),
-                              onPressed: () {
-                                taskBox.deleteAt(index);
-                              },
-                            ),
+                          secondary: IconButton(
+                            icon: const FaIcon(FontAwesomeIcons.trash),
+                            onPressed: () {
+                              taskBox.deleteAt(index);
+                            },
                           ),
                           value: task.isDone,
                           onChanged: (val) {

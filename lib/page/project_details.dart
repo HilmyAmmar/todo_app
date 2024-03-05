@@ -93,7 +93,7 @@ class _ProjectDetailsState extends State<ProjectDetails> {
                     ),
                   ),
                 ),
-                SizedBox(height: 15),
+                SizedBox(height: 10),
                 Text(
                   "Description",
                   style: GoogleFonts.montserrat(
@@ -103,7 +103,6 @@ class _ProjectDetailsState extends State<ProjectDetails> {
                         color: Color(0xFF013c58)),
                   ),
                 ),
-                SizedBox(height: 10),
                 Text(
                   widget.project.description,
                   style: GoogleFonts.montserrat(
@@ -196,7 +195,7 @@ class _ProjectDetailsState extends State<ProjectDetails> {
             ),
             width: double.infinity,
             constraints: BoxConstraints(
-                minHeight: MediaQuery.of(context).size.height * 0.6),
+                minHeight: MediaQuery.of(context).size.height * 0.5),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -292,6 +291,8 @@ class _ProjectDetailsState extends State<ProjectDetails> {
                                 } else {
                                   widget.project.completedTask--;
                                 }
+                                projectBox.putAt(
+                                    widget.project.id - 1, widget.project);
                               });
                             },
                           ),

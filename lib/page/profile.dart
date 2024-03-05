@@ -141,7 +141,7 @@ class _MyProfileState extends State<MyProfile> {
                                                   CrossAxisAlignment.center,
                                               children: [
                                                 Text(
-                                                  "5",
+                                                  projectBox.length.toString(),
                                                   style: GoogleFonts.montserrat(
                                                     textStyle: const TextStyle(
                                                       fontWeight:
@@ -151,7 +151,7 @@ class _MyProfileState extends State<MyProfile> {
                                                   ),
                                                 ),
                                                 Text(
-                                                  "Total Task",
+                                                  "Total Project",
                                                   style: GoogleFonts.montserrat(
                                                     textStyle: const TextStyle(
                                                       fontWeight:
@@ -184,38 +184,6 @@ class _MyProfileState extends State<MyProfile> {
                                                 ),
                                                 Text(
                                                   "Priority Tasks",
-                                                  style: GoogleFonts.montserrat(
-                                                    textStyle: const TextStyle(
-                                                      fontWeight:
-                                                          FontWeight.w400,
-                                                      fontSize: 10,
-                                                    ),
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                          const VerticalDivider(
-                                            color: Color(0x4Dffc300),
-                                            thickness: 2,
-                                          ),
-                                          Expanded(
-                                            child: Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.center,
-                                              children: [
-                                                Text(
-                                                  taskBox.length.toString(),
-                                                  style: GoogleFonts.montserrat(
-                                                    textStyle: const TextStyle(
-                                                      fontWeight:
-                                                          FontWeight.w700,
-                                                      fontSize: 30,
-                                                    ),
-                                                  ),
-                                                ),
-                                                Text(
-                                                  "Daily tasks",
                                                   style: GoogleFonts.montserrat(
                                                     textStyle: const TextStyle(
                                                       fontWeight:

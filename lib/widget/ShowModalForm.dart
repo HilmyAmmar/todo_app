@@ -109,6 +109,18 @@ class _showFormModalState extends State<ShowFormModal> {
                             const SizedBox(height: 10),
                             TextFormField(
                               controller: _titleController,
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'Please Enter a Title.';
+                                }
+                                if (value.length < 8) {
+                                  return 'Title must contain at least 8 words.';
+                                }
+                                if (value.length > 25) {
+                                  return 'Title must contain at most 30 words.';
+                                }
+                                return null;
+                              },
                               decoration: InputDecoration(
                                   hintText: 'Title',
                                   hintStyle: const TextStyle(
@@ -167,6 +179,13 @@ class _showFormModalState extends State<ShowFormModal> {
                                         TextFormField(
                                           controller: _dateController,
                                           readOnly: true,
+                                          validator: (value) {
+                                            if (value == null ||
+                                                value.isEmpty) {
+                                              return 'Please select date.';
+                                            }
+                                            return null;
+                                          },
                                           decoration: InputDecoration(
                                             hintText: 'Date',
                                             hintStyle: const TextStyle(
@@ -338,6 +357,15 @@ class _showFormModalState extends State<ShowFormModal> {
                                     minLines: 4,
                                     maxLines: 4,
                                     controller: _descriptionController,
+                                    validator: (value) {
+                                      if (value == null || value.isEmpty) {
+                                        return 'Please Enter a Title.';
+                                      }
+                                      if (value.length < 20) {
+                                        return 'Title must contain at least 20 words.';
+                                      }
+                                      return null;
+                                    },
                                     decoration: InputDecoration(
                                         hintText: 'Description ',
                                         hintStyle: const TextStyle(

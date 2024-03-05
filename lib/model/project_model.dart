@@ -1,40 +1,49 @@
+import 'package:hive/hive.dart';
+import 'package:todo_application/model/sub_task_model.dart';
+import 'package:todo_application/model/task_model.dart';
+part 'project_model.g.dart';
+
+@HiveType(typeId: 1)
 class ProjectModel {
-  int projectId;
+  @HiveField(0)
   int totalTask;
+
+  @HiveField(1)
   int completedTask;
-  String deadline;
-  String name;
+
+  @HiveField(2)
+  DateTime dueDate;
+
+  @HiveField(3)
+  String title;
+
+  @HiveField(4)
+  String description;
+
+  @HiveField(5)
+  String category;
+
+  @HiveField(6)
+  List<SubTaskModel> taskList;
+
+  @HiveField(7)
+  int id;
 
   ProjectModel(
-      {required this.projectId,
-      required this.totalTask,
+      {required this.totalTask,
       required this.completedTask,
-      required this.deadline,
-      required this.name});
+      required this.dueDate,
+      required this.title,
+      required this.description,
+      required this.category,
+      required this.taskList,
+      required this.id});
 
-  static List<ProjectModel> getAllProject() {
-    List<ProjectModel> allProject = [];
+  void addTask(SubTaskModel task) {
+    taskList.add(task);
+  }
 
-    allProject.add(ProjectModel(
-        projectId: 1,
-        totalTask: 5,
-        completedTask: 3,
-        deadline: "Mon, 7 February",
-        name: "Advanced Programming Project"));
-
-    allProject.add(ProjectModel(
-        projectId: 2,
-        totalTask: 4,
-        completedTask: 0,
-        deadline: "Sun, 8 May",
-        name: "Python Project"));
-
-    allProject.add(ProjectModel(
-        projectId: 3,
-        totalTask: 7,
-        completedTask: 1,
-        deadline: "Sun, 9 May",
-        name: "UI/UX Task"));
-    return allProject;
+  void removeTask(SubTaskModel task) {
+    taskList.remove(task);
   }
 }

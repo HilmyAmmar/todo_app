@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:todo_application/model/task_model.dart';
+import 'package:todo_application/model/project_model.dart';
 import 'package:todo_application/page/home.dart';
 import 'package:hive/hive.dart';
 import 'package:path_provider/path_provider.dart';
@@ -10,8 +11,12 @@ Future<void> main() async {
   final appDocumentDirectory = await getApplicationDocumentsDirectory();
   Hive.init(appDocumentDirectory.path);
   await Hive.initFlutter();
+
   Hive.registerAdapter(TaskModelAdapter());
+  Hive.registerAdapter(ProjectModelAdapter());
+
   await Hive.openBox<TaskModel>('tasks');
+  await Hive.openBox<ProjectModel>('projects');
   runApp(const MainApp());
 }
 

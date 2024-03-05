@@ -1,41 +1,35 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'task_model.dart';
+part of 'sub_task_model.dart';
 
 // **************************************************************************
 // TypeAdapterGenerator
 // **************************************************************************
 
-class TaskModelAdapter extends TypeAdapter<TaskModel> {
+class SubTaskModelAdapter extends TypeAdapter<SubTaskModel> {
   @override
   final int typeId = 0;
 
   @override
-  TaskModel read(BinaryReader reader) {
+  SubTaskModel read(BinaryReader reader) {
     final numOfFields = reader.readByte();
     final fields = <int, dynamic>{
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
-    return TaskModel(
+    return SubTaskModel(
       title: fields[0] as String,
-      date: fields[1] as DateTime?,
-      isDone: fields[2] as bool,
-      category: fields[3] as String,
+      isDone: fields[1] as bool,
     );
   }
 
   @override
-  void write(BinaryWriter writer, TaskModel obj) {
+  void write(BinaryWriter writer, SubTaskModel obj) {
     writer
-      ..writeByte(4)
+      ..writeByte(2)
       ..writeByte(0)
       ..write(obj.title)
       ..writeByte(1)
-      ..write(obj.date)
-      ..writeByte(2)
-      ..write(obj.isDone)
-      ..writeByte(3)
-      ..write(obj.category);
+      ..write(obj.isDone);
   }
 
   @override
@@ -44,7 +38,7 @@ class TaskModelAdapter extends TypeAdapter<TaskModel> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is TaskModelAdapter &&
+      other is SubTaskModelAdapter &&
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }

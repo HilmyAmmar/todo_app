@@ -3,15 +3,23 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:hive/hive.dart';
+import 'package:todo_application/model/project_model.dart';
+import 'package:todo_application/model/sub_task_model.dart';
 import 'package:todo_application/model/task_model.dart';
 
 class ShowFormModal extends StatefulWidget {
-  const ShowFormModal({
-    super.key,
-    required GlobalKey<FormState> formKey,
-  }) : _formKey = formKey;
+  const ShowFormModal(
+      {super.key,
+      required GlobalKey<FormState> formKey,
+      required this.isTask,
+      required this.isSubTask,
+      this.project})
+      : _formKey = formKey;
 
   final GlobalKey<FormState> _formKey;
+  final bool isTask;
+  final bool isSubTask;
+  final ProjectModel? project;
 
   @override
   State<ShowFormModal> createState() => _showFormModalState();
@@ -20,17 +28,20 @@ class ShowFormModal extends StatefulWidget {
 class _showFormModalState extends State<ShowFormModal> {
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _dateController = TextEditingController();
-  final TextEditingController _categoryController = TextEditingController();
-
+  final TextEditingController _descriptionController = TextEditingController();
   late Box<TaskModel> taskBox;
+  late Box<ProjectModel> projectBox;
+
   @override
   void initState() {
     super.initState();
     taskBox = Hive.box<TaskModel>('tasks');
+    projectBox = Hive.box<ProjectModel>('projects');
   }
 
   String? selectedCategory;
   final List<String> categoryList = ['Priority', 'Daily'];
+  final List<String> priorityList = ["High", "Medium", "Low"];
 
   Future<void> _selectDate(BuildContext context) async {
     final DateTime? pickedDate = await showDatePicker(
@@ -70,7 +81,9 @@ class _showFormModalState extends State<ShowFormModal> {
                             Align(
                               alignment: Alignment.center,
                               child: Text(
-                                "Add New Task",
+                                widget.isTask
+                                    ? "Add New Task"
+                                    : "Add New Project",
                                 style: GoogleFonts.montserrat(
                                   textStyle: const TextStyle(
                                     fontWeight: FontWeight.w700,
@@ -81,7 +94,7 @@ class _showFormModalState extends State<ShowFormModal> {
                             ),
                             const SizedBox(height: 10),
                             Text(
-                              "Name",
+                              "Title",
                               style: GoogleFonts.montserrat(
                                 textStyle: const TextStyle(
                                   fontWeight: FontWeight.w400,
@@ -126,93 +139,32 @@ class _showFormModalState extends State<ShowFormModal> {
                                       borderSide: BorderSide.none)),
                             ),
                             const SizedBox(height: 10),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Flexible(
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        "Date",
-                                        style: GoogleFonts.montserrat(
-                                          textStyle: const TextStyle(
-                                            fontWeight: FontWeight.w400,
-                                            fontSize: 15,
-                                          ),
-                                        ),
-                                      ),
-                                      const SizedBox(height: 10),
-                                      TextFormField(
-                                        controller: _dateController,
-                                        readOnly: true,
-                                        decoration: InputDecoration(
-                                          hintText: 'Date',
-                                          hintStyle: const TextStyle(
-                                              color: Color(0xffDDDADA),
-                                              fontSize: 14),
-                                          filled: true,
-                                          fillColor: Colors.white,
-                                          contentPadding:
-                                              const EdgeInsets.symmetric(
-                                                  horizontal: 15),
-                                          suffixIcon: SizedBox(
-                                            width: 70,
-                                            child: IntrinsicHeight(
-                                              child: Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.end,
-                                                children: [
-                                                  const VerticalDivider(
-                                                    color: Colors.black,
-                                                    indent: 10,
-                                                    endIndent: 10,
-                                                    thickness: 0.1,
-                                                  ),
-                                                  IconButton(
-                                                    onPressed: () {
-                                                      _selectDate(context);
-                                                    },
-                                                    icon: const Icon(Icons
-                                                        .calendar_today_rounded),
-                                                  ),
-                                                ],
-                                              ),
+                            if (!widget.isSubTask)
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Flexible(
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          "Date",
+                                          style: GoogleFonts.montserrat(
+                                            textStyle: const TextStyle(
+                                              fontWeight: FontWeight.w400,
+                                              fontSize: 15,
                                             ),
                                           ),
-                                          border: OutlineInputBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(15),
-                                            borderSide: BorderSide.none,
-                                          ),
                                         ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                const SizedBox(width: 20),
-                                Flexible(
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        "Category",
-                                        style: GoogleFonts.montserrat(
-                                          textStyle: const TextStyle(
-                                            fontWeight: FontWeight.w400,
-                                            fontSize: 15,
-                                          ),
-                                        ),
-                                      ),
-                                      const SizedBox(height: 10),
-                                      DropdownButtonFormField(
-                                          isExpanded: true,
-                                          value: selectedCategory,
+                                        const SizedBox(height: 10),
+                                        TextFormField(
+                                          controller: _dateController,
+                                          readOnly: true,
                                           decoration: InputDecoration(
-                                            hintText: 'Category',
+                                            hintText: 'Date',
                                             hintStyle: const TextStyle(
                                                 color: Color(0xffDDDADA),
                                                 fontSize: 14),
@@ -221,24 +173,25 @@ class _showFormModalState extends State<ShowFormModal> {
                                             contentPadding:
                                                 const EdgeInsets.symmetric(
                                                     horizontal: 15),
-                                            suffixIcon: const SizedBox(
+                                            suffixIcon: SizedBox(
                                               width: 70,
                                               child: IntrinsicHeight(
                                                 child: Row(
                                                   mainAxisAlignment:
                                                       MainAxisAlignment.end,
                                                   children: [
-                                                    VerticalDivider(
+                                                    const VerticalDivider(
                                                       color: Colors.black,
                                                       indent: 10,
                                                       endIndent: 10,
                                                       thickness: 0.1,
                                                     ),
-                                                    Padding(
-                                                      padding:
-                                                          EdgeInsets.all(12),
-                                                      child: Icon(Icons
-                                                          .drive_file_rename_outline_rounded),
+                                                    IconButton(
+                                                      onPressed: () {
+                                                        _selectDate(context);
+                                                      },
+                                                      icon: const Icon(Icons
+                                                          .calendar_today_rounded),
                                                     ),
                                                   ],
                                                 ),
@@ -250,35 +203,154 @@ class _showFormModalState extends State<ShowFormModal> {
                                               borderSide: BorderSide.none,
                                             ),
                                           ),
-                                          items: categoryList
-                                              .map((item) =>
-                                                  DropdownMenuItem<String>(
-                                                    value: item,
-                                                    child: Text(
-                                                      item,
-                                                      style: const TextStyle(
-                                                        fontSize: 14,
-                                                      ),
-                                                    ),
-                                                  ))
-                                              .toList(),
-                                          validator: (value) {
-                                            if (value == null) {
-                                              return 'Please select category.';
-                                            }
-                                            return null;
-                                          },
-                                          onChanged: (value) {
-                                            setState(() {
-                                              selectedCategory =
-                                                  value as String?;
-                                            });
-                                          }),
-                                    ],
+                                        ),
+                                      ],
+                                    ),
                                   ),
-                                ),
-                              ],
-                            ),
+                                  const SizedBox(width: 20),
+                                  Flexible(
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          widget.isTask
+                                              ? "Category"
+                                              : "Priority",
+                                          style: GoogleFonts.montserrat(
+                                            textStyle: const TextStyle(
+                                              fontWeight: FontWeight.w400,
+                                              fontSize: 15,
+                                            ),
+                                          ),
+                                        ),
+                                        const SizedBox(height: 10),
+                                        DropdownButtonFormField(
+                                            isExpanded: true,
+                                            value: selectedCategory,
+                                            decoration: InputDecoration(
+                                              hintText: widget.isTask
+                                                  ? 'Category'
+                                                  : 'Priority',
+                                              hintStyle: const TextStyle(
+                                                  color: Color(0xffDDDADA),
+                                                  fontSize: 14),
+                                              filled: true,
+                                              fillColor: Colors.white,
+                                              contentPadding:
+                                                  const EdgeInsets.symmetric(
+                                                      horizontal: 15),
+                                              suffixIcon: const SizedBox(
+                                                width: 70,
+                                                child: IntrinsicHeight(
+                                                  child: Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment.end,
+                                                    children: [
+                                                      VerticalDivider(
+                                                        color: Colors.black,
+                                                        indent: 10,
+                                                        endIndent: 10,
+                                                        thickness: 0.1,
+                                                      ),
+                                                      Padding(
+                                                        padding:
+                                                            EdgeInsets.all(12),
+                                                        child: Icon(Icons
+                                                            .drive_file_rename_outline_rounded),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                              ),
+                                              border: OutlineInputBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(15),
+                                                borderSide: BorderSide.none,
+                                              ),
+                                            ),
+                                            items: widget.isTask
+                                                ? categoryList
+                                                    .map((item) =>
+                                                        DropdownMenuItem<
+                                                            String>(
+                                                          value: item,
+                                                          child: Text(
+                                                            item,
+                                                            style:
+                                                                const TextStyle(
+                                                              fontSize: 14,
+                                                            ),
+                                                          ),
+                                                        ))
+                                                    .toList()
+                                                : priorityList
+                                                    .map((item) =>
+                                                        DropdownMenuItem<
+                                                            String>(
+                                                          value: item,
+                                                          child: Text(
+                                                            item,
+                                                            style:
+                                                                const TextStyle(
+                                                              fontSize: 14,
+                                                            ),
+                                                          ),
+                                                        ))
+                                                    .toList(),
+                                            validator: (value) {
+                                              if (value == null) {
+                                                return 'Please select category.';
+                                              }
+                                              return null;
+                                            },
+                                            onChanged: (value) {
+                                              setState(() {
+                                                selectedCategory =
+                                                    value as String?;
+                                              });
+                                            }),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            const SizedBox(height: 20),
+                            if (!widget.isSubTask && !widget.isTask)
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    "Description",
+                                    style: GoogleFonts.montserrat(
+                                      textStyle: const TextStyle(
+                                        fontWeight: FontWeight.w500,
+                                        fontSize: 16,
+                                      ),
+                                    ),
+                                  ),
+                                  const SizedBox(height: 10),
+                                  TextFormField(
+                                    keyboardType: TextInputType.multiline,
+                                    minLines: 4,
+                                    maxLines: 4,
+                                    controller: _descriptionController,
+                                    decoration: InputDecoration(
+                                        hintText: 'Description ',
+                                        hintStyle: const TextStyle(
+                                            color: Color(0xffDDDADA),
+                                            fontSize: 14),
+                                        filled: true,
+                                        fillColor: Colors.white,
+                                        contentPadding:
+                                            const EdgeInsets.all(15),
+                                        border: OutlineInputBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(10),
+                                            borderSide: BorderSide.none)),
+                                  ),
+                                ],
+                              ),
                             const SizedBox(height: 20),
                             Align(
                               alignment: Alignment.center,
@@ -286,15 +358,40 @@ class _showFormModalState extends State<ShowFormModal> {
                                   onPressed: () {
                                     if (widget._formKey.currentState!
                                         .validate()) {
-                                      final newTask = TaskModel(
-                                        title: _titleController.text,
-                                        date: DateTime.parse(
-                                            _dateController.text),
-                                        isDone: false,
-                                        category: selectedCategory!,
-                                      );
+                                      if (widget.isTask) {
+                                        final newTask = TaskModel(
+                                          title: _titleController.text,
+                                          date: DateTime.parse(
+                                              _dateController.text),
+                                          isDone: false,
+                                          category: selectedCategory!,
+                                        );
+                                        taskBox.add(newTask);
+                                      } else if (widget.isSubTask) {
+                                        final newSubTask = SubTaskModel(
+                                            title: _titleController.text,
+                                            isDone: false);
+                                        widget.project?.taskList
+                                            .add(newSubTask);
+                                        projectBox.put(widget.project!.id,
+                                            widget.project!);
+                                      } else {
+                                        int nextId =
+                                            projectBox?.length ?? 0 + 1;
+                                        final newProject = ProjectModel(
+                                            totalTask: 0,
+                                            completedTask: 0,
+                                            dueDate: DateTime.parse(
+                                                _dateController.text),
+                                            title: _titleController.text,
+                                            description:
+                                                _descriptionController.text,
+                                            category: selectedCategory!,
+                                            taskList: [],
+                                            id: nextId);
+                                        projectBox.add(newProject);
+                                      }
 
-                                      taskBox.add(newTask);
                                       reset();
                                       Navigator.of(context).pop();
                                     }
@@ -304,7 +401,9 @@ class _showFormModalState extends State<ShowFormModal> {
                                           vertical: 16, horizontal: 100),
                                       backgroundColor: Color(0xFFffad47)),
                                   child: Text(
-                                    "Create Task",
+                                    widget.isTask
+                                        ? "Create Task"
+                                        : "Create Project",
                                     style: GoogleFonts.montserrat(
                                       textStyle: const TextStyle(
                                           fontWeight: FontWeight.w600,
@@ -333,6 +432,7 @@ class _showFormModalState extends State<ShowFormModal> {
     setState(() {
       selectedCategory = null;
     });
+    _descriptionController.clear();
   }
 
   @override

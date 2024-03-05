@@ -7,7 +7,7 @@ class TaskModel {
   String title;
 
   @HiveField(1)
-  DateTime date;
+  DateTime? date;
 
   @HiveField(2)
   bool isDone;

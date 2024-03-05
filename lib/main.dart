@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/adapters.dart';
+import 'package:todo_application/model/sub_task_model.dart';
 import 'package:todo_application/model/task_model.dart';
 import 'package:todo_application/model/project_model.dart';
 import 'package:todo_application/page/home.dart';
@@ -14,9 +15,11 @@ Future<void> main() async {
 
   Hive.registerAdapter(TaskModelAdapter());
   Hive.registerAdapter(ProjectModelAdapter());
+  Hive.registerAdapter(SubTaskModelAdapter());
 
   await Hive.openBox<TaskModel>('tasks');
   await Hive.openBox<ProjectModel>('projects');
+  await Hive.openBox<SubTaskModel>('subTasks');
   runApp(const MainApp());
 }
 

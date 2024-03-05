@@ -1,7 +1,7 @@
 import 'package:hive/hive.dart';
 part 'sub_task_model.g.dart';
 
-@HiveType(typeId: 0)
+@HiveType(typeId: 2)
 class SubTaskModel {
   @HiveField(0)
   String title;
@@ -9,5 +9,7 @@ class SubTaskModel {
   @HiveField(1)
   bool isDone;
 
-  SubTaskModel({required this.title, required this.isDone});
+  @HiveField(2)
+  int? parentId;
+  SubTaskModel({required this.title, required this.isDone, this.parentId});
 }

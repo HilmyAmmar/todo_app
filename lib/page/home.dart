@@ -20,11 +20,16 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   Box<TaskModel>? taskBox;
   Box<ProjectModel>? projectBox;
+
+  bool _isInitialized = false;
   @override
   void initState() {
     super.initState();
-    taskBox = Hive.box<TaskModel>('tasks');
-    projectBox = Hive.box<ProjectModel>('projects');
+    if (!_isInitialized) {
+      taskBox = Hive.box<TaskModel>('tasks');
+      projectBox = Hive.box<ProjectModel>('projects');
+      _isInitialized = true;
+    }
   }
 
   DateTime now = DateTime.now();
@@ -121,7 +126,8 @@ class _HomePageState extends State<HomePage> {
               ),
               const SizedBox(height: 20),
               ValueListenableBuilder(
-                valueListenable: projectBox!.listenable(),
+                valueListenable:
+                    Hive.box<ProjectModel>('projects').listenable(),
                 builder: (BuildContext context, Box<ProjectModel> projectBox,
                     Widget? child) {
                   if (projectBox.isEmpty) {
@@ -312,10 +318,12 @@ class _HomePageState extends State<HomePage> {
                                   Text(
                                     task.title,
                                     style: GoogleFonts.montserrat(
-                                      textStyle: const TextStyle(
-                                        fontWeight: FontWeight.w700,
-                                        fontSize: 16,
-                                      ),
+                                      textStyle: TextStyle(
+                                          fontWeight: FontWeight.w700,
+                                          fontSize: 16,
+                                          decoration: task.isDone
+                                              ? TextDecoration.lineThrough
+                                              : TextDecoration.none),
                                     ),
                                   ),
                                   Container(

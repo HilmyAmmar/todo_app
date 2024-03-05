@@ -31,12 +31,14 @@ class _showFormModalState extends State<ShowFormModal> {
   final TextEditingController _descriptionController = TextEditingController();
   late Box<TaskModel> taskBox;
   late Box<ProjectModel> projectBox;
+  late Box<SubTaskModel> subTaskBox;
 
   @override
   void initState() {
     super.initState();
     taskBox = Hive.box<TaskModel>('tasks');
     projectBox = Hive.box<ProjectModel>('projects');
+    subTaskBox = Hive.box<SubTaskModel>('subTasks');
   }
 
   String? selectedCategory;
@@ -83,7 +85,9 @@ class _showFormModalState extends State<ShowFormModal> {
                               child: Text(
                                 widget.isTask
                                     ? "Add New Task"
-                                    : "Add New Project",
+                                    : widget.isSubTask
+                                        ? "Add New Sub-Task"
+                                        : "Add New Project",
                                 style: GoogleFonts.montserrat(
                                   textStyle: const TextStyle(
                                     fontWeight: FontWeight.w700,
@@ -306,8 +310,7 @@ class _showFormModalState extends State<ShowFormModal> {
                                             },
                                             onChanged: (value) {
                                               setState(() {
-                                                selectedCategory =
-                                                    value as String?;
+                                                selectedCategory = value;
                                               });
                                             }),
                                       ],
@@ -370,14 +373,14 @@ class _showFormModalState extends State<ShowFormModal> {
                                       } else if (widget.isSubTask) {
                                         final newSubTask = SubTaskModel(
                                             title: _titleController.text,
-                                            isDone: false);
-                                        widget.project?.taskList
-                                            .add(newSubTask);
-                                        projectBox.put(widget.project!.id,
+                                            isDone: false,
+                                            parentId: widget.project!.id);
+                                        widget.project!.addTask(newSubTask);
+                                        projectBox.putAt(widget.project!.id - 1,
                                             widget.project!);
-                                      } else {
-                                        int nextId =
-                                            projectBox?.length ?? 0 + 1;
+                                      } else if (!widget.isSubTask &&
+                                          !widget.isTask) {
+                                        int nextId = projectBox.length + 1;
                                         final newProject = ProjectModel(
                                             totalTask: 0,
                                             completedTask: 0,
@@ -397,13 +400,15 @@ class _showFormModalState extends State<ShowFormModal> {
                                     }
                                   },
                                   style: ElevatedButton.styleFrom(
-                                      padding: EdgeInsets.symmetric(
+                                      padding: const EdgeInsets.symmetric(
                                           vertical: 16, horizontal: 100),
-                                      backgroundColor: Color(0xFFffad47)),
+                                      backgroundColor: const Color(0xFFffad47)),
                                   child: Text(
                                     widget.isTask
                                         ? "Create Task"
-                                        : "Create Project",
+                                        : widget.isSubTask
+                                            ? "Create Sub-Task"
+                                            : "Create Project",
                                     style: GoogleFonts.montserrat(
                                       textStyle: const TextStyle(
                                           fontWeight: FontWeight.w600,
@@ -419,8 +424,8 @@ class _showFormModalState extends State<ShowFormModal> {
                 );
               });
         },
-        icon: FaIcon(
-          FontAwesomeIcons.add,
+        icon: const FaIcon(
+          FontAwesomeIcons.plus,
           color: Color(0xFFff8800),
         ));
   }
@@ -439,6 +444,7 @@ class _showFormModalState extends State<ShowFormModal> {
   void dispose() {
     _dateController.dispose();
     _titleController.dispose();
+    _descriptionController.dispose();
     super.dispose();
   }
 }

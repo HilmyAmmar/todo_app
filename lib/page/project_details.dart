@@ -45,6 +45,18 @@ class _ProjectDetailsState extends State<ProjectDetails> {
         scrolledUnderElevation: 0,
         bottomOpacity: 0,
         backgroundColor: Color(0x4Dffba42),
+        actions: [
+          IconButton(
+              onPressed: () {
+                int projectIndex =
+                    projectBox.values.toList().indexOf(widget.project);
+                if (projectIndex != -1) {
+                  projectBox.deleteAt(projectIndex);
+                  Navigator.of(context).pop();
+                }
+              },
+              icon: Icon(FontAwesomeIcons.trash)),
+        ],
       ),
       body: SingleChildScrollView(
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
@@ -184,8 +196,7 @@ class _ProjectDetailsState extends State<ProjectDetails> {
             ),
             width: double.infinity,
             constraints: BoxConstraints(
-                minHeight: MediaQuery.of(context).size.height -
-                    AppBar().preferredSize.height),
+                minHeight: MediaQuery.of(context).size.height * 0.6),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -262,10 +273,12 @@ class _ProjectDetailsState extends State<ProjectDetails> {
                                 Text(
                                   task.title,
                                   style: GoogleFonts.montserrat(
-                                    textStyle: const TextStyle(
-                                      fontWeight: FontWeight.w700,
-                                      fontSize: 16,
-                                    ),
+                                    textStyle: TextStyle(
+                                        fontWeight: FontWeight.w700,
+                                        fontSize: 16,
+                                        decoration: task.isDone
+                                            ? TextDecoration.lineThrough
+                                            : TextDecoration.none),
                                   ),
                                 ),
                               ],
@@ -274,6 +287,11 @@ class _ProjectDetailsState extends State<ProjectDetails> {
                             onChanged: (val) {
                               setState(() {
                                 task.isDone = val!;
+                                if (task.isDone) {
+                                  widget.project.completedTask++;
+                                } else {
+                                  widget.project.completedTask--;
+                                }
                               });
                             },
                           ),

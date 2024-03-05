@@ -8,7 +8,7 @@ part of 'sub_task_model.dart';
 
 class SubTaskModelAdapter extends TypeAdapter<SubTaskModel> {
   @override
-  final int typeId = 0;
+  final int typeId = 2;
 
   @override
   SubTaskModel read(BinaryReader reader) {
@@ -19,17 +19,20 @@ class SubTaskModelAdapter extends TypeAdapter<SubTaskModel> {
     return SubTaskModel(
       title: fields[0] as String,
       isDone: fields[1] as bool,
+      parentId: fields[2] as int?,
     );
   }
 
   @override
   void write(BinaryWriter writer, SubTaskModel obj) {
     writer
-      ..writeByte(2)
+      ..writeByte(3)
       ..writeByte(0)
       ..write(obj.title)
       ..writeByte(1)
-      ..write(obj.isDone);
+      ..write(obj.isDone)
+      ..writeByte(2)
+      ..write(obj.parentId);
   }
 
   @override

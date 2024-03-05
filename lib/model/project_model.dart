@@ -41,6 +41,7 @@ class ProjectModel {
 
   void addTask(SubTaskModel task) {
     taskList.add(task);
+    totalTask++;
   }
 
   void removeTask(SubTaskModel task) {

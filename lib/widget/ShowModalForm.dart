@@ -60,7 +60,7 @@ class _showFormModalState extends State<ShowFormModal> {
                   onSurface: Color(0xFF013c58)),
               textButtonTheme: TextButtonThemeData(
                 style: TextButton.styleFrom(
-                  foregroundColor: Color(0xFF0b1e33), // button text color
+                  foregroundColor: Color(0xFF0b1e33),
                 ),
               ),
             ),

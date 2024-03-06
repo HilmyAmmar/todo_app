@@ -98,6 +98,7 @@ class _HomePageState extends State<HomePage> {
       body: SingleChildScrollView(
         child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 30),
+          width: double.infinity,
           constraints: BoxConstraints(
               minHeight: MediaQuery.of(context).size.height * 0.85),
           decoration: const BoxDecoration(
@@ -107,7 +108,6 @@ class _HomePageState extends State<HomePage> {
               topRight: Radius.circular(30),
             ),
           ),
-          width: double.infinity,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -145,155 +145,158 @@ class _HomePageState extends State<HomePage> {
                         ),
                       ),
                     );
-                  }
-                  return SizedBox(
-                    height: 150,
-                    child: ListView.separated(
-                      clipBehavior: Clip.none,
-                      scrollDirection: Axis.horizontal,
-                      shrinkWrap: true,
-                      itemBuilder: (context, index) {
-                        ProjectModel project = projectBox.getAt(index)!;
-                        return InkWell(
-                          onTap: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) =>
-                                        ProjectDetails(project: project)));
-                          },
-                          child: Container(
-                            width: MediaQuery.of(context).size.width * 0.7,
-                            height: MediaQuery.of(context).size.height * 0.2,
-                            decoration: BoxDecoration(
-                              color: (project.id % 2 == 1)
-                                  ? const Color(0xFF00537a)
-                                  : const Color(0xFFffba42),
-                              borderRadius: BorderRadius.circular(20),
-                              boxShadow: const [
-                                BoxShadow(
-                                  color: Color(0xFFc5c5c5),
-                                  offset: Offset(5, 5),
-                                  blurRadius: 5,
-                                  spreadRadius: 0,
-                                )
-                              ],
-                            ),
-                            child: Padding(
-                              padding: const EdgeInsets.all(20),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Expanded(
-                                    child: Text(
-                                      project.title,
-                                      style: GoogleFonts.montserrat(
-                                        textStyle: TextStyle(
-                                          fontWeight: FontWeight.w700,
-                                          fontSize: 20,
-                                          color: (project.id % 2 == 1)
-                                              ? Colors.white
-                                              : const Color(0xFF0b1e33),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Row(
-                                        children: [
-                                          const Icon(
-                                            Icons.calendar_today_rounded,
-                                            color: Colors.white,
-                                            size: 14,
-                                          ),
-                                          const SizedBox(
-                                            width: 5,
-                                          ),
-                                          Text(
-                                            DateFormat('yyyy-MM-dd')
-                                                .format(project.dueDate),
-                                            style: GoogleFonts.montserrat(
-                                              textStyle: TextStyle(
-                                                fontWeight: FontWeight.w700,
-                                                fontSize: 14,
-                                                color: (project.id % 2 == 1)
-                                                    ? Colors.white
-                                                    : const Color(0xFF0b1e33),
-                                              ),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                      if (project.completedTask != 0)
-                                        Container(
-                                          padding: const EdgeInsets.symmetric(
-                                              horizontal: 8, vertical: 4),
-                                          decoration: BoxDecoration(
-                                              color: (project.id % 2 == 1)
-                                                  ? const Color(0xFFffba42)
-                                                  : const Color(0xFF00537a),
-                                              borderRadius:
-                                                  BorderRadius.circular(15)),
-                                          child: Text(
-                                            project.completedTask ==
-                                                    project.totalTask
-                                                ? "Complete"
-                                                : "In Progress",
-                                            style: GoogleFonts.montserrat(
-                                              textStyle: TextStyle(
-                                                fontWeight: FontWeight.w700,
-                                                fontSize: 8,
-                                                color: (project.id % 2 == 1)
-                                                    ? const Color(0xFF00537a)
-                                                    : const Color(0xFFffba42),
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                    ],
-                                  ),
-                                  const SizedBox(height: 5),
-                                  LinearPercentIndicator(
-                                    animation: true,
-                                    lineHeight: 8,
-                                    animationDuration: 2000,
-                                    percent: project.totalTask == null
-                                        ? 0
-                                        : project.completedTask /
-                                            project.totalTask,
-                                    barRadius: const Radius.circular(20),
-                                    progressColor: (project.id % 2 == 1)
-                                        ? const Color(0xFFffba42)
-                                        : const Color(0xFF00537a),
-                                    trailing: Text(
-                                      "${project.completedTask}/${project.totalTask}",
-                                      style: GoogleFonts.montserrat(
-                                        textStyle: TextStyle(
-                                          fontWeight: FontWeight.w700,
-                                          fontSize: 14,
-                                          color: (project.id % 2 == 1)
-                                              ? const Color(0xFFDFD4F8)
-                                              : const Color(0xFF0b1e33),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
+                  } else {
+                    return SizedBox(
+                      height: 150,
+                      child: ListView.separated(
+                        clipBehavior: Clip.none,
+                        scrollDirection: Axis.horizontal,
+                        shrinkWrap: true,
+                        itemBuilder: (context, index) {
+                          ProjectModel project = projectBox.getAt(index)!;
+                          return InkWell(
+                            onTap: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          ProjectDetails(project: project)));
+                            },
+                            child: Container(
+                              width: MediaQuery.of(context).size.width * 0.7,
+                              height: MediaQuery.of(context).size.height * 0.2,
+                              decoration: BoxDecoration(
+                                color: (project.id % 2 == 1)
+                                    ? const Color(0xFF00537a)
+                                    : const Color(0xFFffba42),
+                                borderRadius: BorderRadius.circular(20),
+                                boxShadow: const [
+                                  BoxShadow(
+                                    color: Color(0xFFc5c5c5),
+                                    offset: Offset(5, 5),
+                                    blurRadius: 5,
+                                    spreadRadius: 0,
+                                  )
                                 ],
                               ),
+                              child: Padding(
+                                padding: const EdgeInsets.all(20),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Expanded(
+                                      child: Text(
+                                        project.title,
+                                        style: GoogleFonts.montserrat(
+                                          textStyle: TextStyle(
+                                            fontWeight: FontWeight.w700,
+                                            fontSize: 20,
+                                            color: (project.id % 2 == 1)
+                                                ? Colors.white
+                                                : const Color(0xFF0b1e33),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Row(
+                                          children: [
+                                            const Icon(
+                                              Icons.calendar_today_rounded,
+                                              color: Colors.white,
+                                              size: 14,
+                                            ),
+                                            const SizedBox(
+                                              width: 5,
+                                            ),
+                                            Text(
+                                              DateFormat('yyyy-MM-dd')
+                                                  .format(project.dueDate),
+                                              style: GoogleFonts.montserrat(
+                                                textStyle: TextStyle(
+                                                  fontWeight: FontWeight.w700,
+                                                  fontSize: 14,
+                                                  color: (project.id % 2 == 1)
+                                                      ? Colors.white
+                                                      : const Color(0xFF0b1e33),
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        if (project.completedTask != 0)
+                                          Container(
+                                            padding: const EdgeInsets.symmetric(
+                                                horizontal: 8, vertical: 4),
+                                            decoration: BoxDecoration(
+                                                color: (project.id % 2 == 1)
+                                                    ? const Color(0xFFffba42)
+                                                    : const Color(0xFF00537a),
+                                                borderRadius:
+                                                    BorderRadius.circular(15)),
+                                            child: Text(
+                                              project.completedTask ==
+                                                      project.totalTask
+                                                  ? "Complete"
+                                                  : "In Progress",
+                                              style: GoogleFonts.montserrat(
+                                                textStyle: TextStyle(
+                                                  fontWeight: FontWeight.w700,
+                                                  fontSize: 8,
+                                                  color: (project.id % 2 == 1)
+                                                      ? const Color(0xFF00537a)
+                                                      : const Color(0xFFffba42),
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                      ],
+                                    ),
+                                    const SizedBox(height: 5),
+                                    LinearPercentIndicator(
+                                      animation: true,
+                                      lineHeight: 8,
+                                      animationDuration: 2000,
+                                      percent: project.totalTask == 0
+                                          ? 0
+                                          : project.completedTask /
+                                              project.totalTask,
+                                      barRadius: const Radius.circular(20),
+                                      progressColor: (project.id % 2 == 1)
+                                          ? const Color(0xFFffba42)
+                                          : const Color(0xFF00537a),
+                                      trailing: Text(
+                                        project.totalTask == 0
+                                            ? "0/0"
+                                            : "${project.completedTask}/${project.totalTask}",
+                                        style: GoogleFonts.montserrat(
+                                          textStyle: TextStyle(
+                                            fontWeight: FontWeight.w700,
+                                            fontSize: 14,
+                                            color: (project.id % 2 == 1)
+                                                ? const Color(0xFFDFD4F8)
+                                                : const Color(0xFF0b1e33),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
                             ),
-                          ),
-                        );
-                      },
-                      separatorBuilder: (context, index) =>
-                          const SizedBox(width: 25),
-                      itemCount: projectBox.length,
-                    ),
-                  );
+                          );
+                        },
+                        separatorBuilder: (context, index) =>
+                            const SizedBox(width: 25),
+                        itemCount: projectBox.length,
+                      ),
+                    );
+                  }
                 },
               ),
               const SizedBox(height: 30),

@@ -10,6 +10,7 @@ Page:
 1. Home Page: Menampilkan Project dan Task
 2. Project Detail: Menampilkan detail dari project serta sub-task project tersebut.
 3. Profile: Menampilkan profile singkat serta informasi terkait total task dan project yang ada.
+   
 Tambahan: Aplikasi ini juga memiliki widget berupa modal yang berguna sebagai form dalam membuat task, project, dan sub-task.
 
 Package yang digunakan:

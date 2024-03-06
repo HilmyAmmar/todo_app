@@ -1,5 +1,7 @@
 # Mobile Development Recruitment Assignment
 ## Aplikasi To Do List
+Aplikasi to do list telah memenuhi requirement yang tertera pada tugas. Selain itu, Aplikasi ini telah mengimplementasikan fitur tambahan, yaitu HIVE untuk mencegah terjadinya kehilangan data saat aplikasi ditutup atau direstart. 
+
 Fitur utama dalam aplikasi:
 1. Project: Kumpulan berbagai sub-task yang berkaitan dengan topik tertentu. Setiap project memiliki attribut judul, dueDate, deskripsi, serta list sub-task yang dapat ditambahkan setelah membuat project. Beda dengan task, sub-task hanya memiliki judul. Namun tetap memiliki checklist untuk menandakan bahwa sudah selesai. Ketika melakukan checklist pada sub_task, terdapat perubahan pada informasi project secara real-time. 
 2. Task: Memiliki attribut judul, deadline, dan kategory task. Kategory task meliputi daily dan priority. Terdapat fitur delete task serta checklist sebagai penanda bahwa task tersebut telah selesai.

@@ -229,7 +229,7 @@ class _HomePageState extends State<HomePage> {
                                           ),
                                         ],
                                       ),
-                                      if (project.completedTask != null)
+                                      if (project.completedTask != 0)
                                         Container(
                                           padding: const EdgeInsets.symmetric(
                                               horizontal: 8, vertical: 4),
@@ -240,7 +240,10 @@ class _HomePageState extends State<HomePage> {
                                               borderRadius:
                                                   BorderRadius.circular(15)),
                                           child: Text(
-                                            "In Progress",
+                                            project.completedTask ==
+                                                    project.totalTask
+                                                ? "Complete"
+                                                : "In Progress",
                                             style: GoogleFonts.montserrat(
                                               textStyle: TextStyle(
                                                 fontWeight: FontWeight.w700,

@@ -78,20 +78,45 @@ class _ProjectDetailsState extends State<ProjectDetails> {
                   ),
                 ),
                 SizedBox(height: 5),
-                Container(
-                  padding: const EdgeInsets.all(8),
-                  decoration: BoxDecoration(
-                      color: Color(0xFFf5a201),
-                      borderRadius: BorderRadius.circular(15)),
-                  child: Text(
-                    "${widget.project.category} Priority",
-                    style: GoogleFonts.montserrat(
-                      textStyle: const TextStyle(
-                        fontWeight: FontWeight.w700,
-                        fontSize: 10,
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.all(8),
+                      decoration: BoxDecoration(
+                          color: Color(0xFFf5a201),
+                          borderRadius: BorderRadius.circular(15)),
+                      child: Text(
+                        "${widget.project.category} Priority",
+                        style: GoogleFonts.montserrat(
+                          textStyle: const TextStyle(
+                            fontWeight: FontWeight.w700,
+                            fontSize: 10,
+                          ),
+                        ),
                       ),
                     ),
-                  ),
+                    SizedBox(width: 10),
+                    if (widget.project.completedTask != 0)
+                      Container(
+                        padding: const EdgeInsets.all(8),
+                        decoration: BoxDecoration(
+                            color: const Color(0xFFf5a201),
+                            borderRadius: BorderRadius.circular(15)),
+                        child: Text(
+                          widget.project.completedTask ==
+                                  widget.project.totalTask
+                              ? "Complete"
+                              : "In Progress",
+                          style: GoogleFonts.montserrat(
+                            textStyle: const TextStyle(
+                              fontWeight: FontWeight.w700,
+                              fontSize: 10,
+                            ),
+                          ),
+                        ),
+                      ),
+                  ],
                 ),
                 SizedBox(height: 10),
                 Text(

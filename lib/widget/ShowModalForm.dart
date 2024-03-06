@@ -47,11 +47,26 @@ class _showFormModalState extends State<ShowFormModal> {
 
   Future<void> _selectDate(BuildContext context) async {
     final DateTime? pickedDate = await showDatePicker(
-      context: context,
-      initialDate: DateTime.now(),
-      firstDate: DateTime(2000),
-      lastDate: DateTime(2101),
-    );
+        context: context,
+        initialDate: DateTime.now(),
+        firstDate: DateTime(2000),
+        lastDate: DateTime(2101),
+        builder: (context, child) {
+          return Theme(
+            data: Theme.of(context).copyWith(
+              colorScheme: ColorScheme.light(
+                  primary: Color(0xFFffba42),
+                  onPrimary: Color(0xFF0b1e33),
+                  onSurface: Color(0xFF013c58)),
+              textButtonTheme: TextButtonThemeData(
+                style: TextButton.styleFrom(
+                  foregroundColor: Color(0xFF0b1e33), // button text color
+                ),
+              ),
+            ),
+            child: child!,
+          );
+        });
 
     if (pickedDate != null) {
       setState(() {
@@ -382,7 +397,8 @@ class _showFormModalState extends State<ShowFormModal> {
                                   ),
                                 ],
                               ),
-                            const SizedBox(height: 20),
+                            if (!widget.isSubTask && !widget.isTask)
+                              const SizedBox(height: 20),
                             Align(
                               alignment: Alignment.center,
                               child: ElevatedButton(

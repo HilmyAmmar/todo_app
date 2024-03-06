@@ -183,7 +183,7 @@ class _MyProfileState extends State<MyProfile> {
                                                   ),
                                                 ),
                                                 Text(
-                                                  "Priority Tasks",
+                                                  "Total Tasks",
                                                   style: GoogleFonts.montserrat(
                                                     textStyle: const TextStyle(
                                                       fontWeight:
@@ -237,105 +237,125 @@ class _MyProfileState extends State<MyProfile> {
                                     ),
                                   ),
                                   SizedBox(height: 10),
-                                  Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                      children: [
-                                        Icon(Icons.email),
-                                        Text(
-                                          "hilmyammardarmawan17@gmail.com",
-                                          style: GoogleFonts.montserrat(
-                                            textStyle: const TextStyle(
-                                              fontWeight: FontWeight.w400,
-                                              fontSize: 12,
-                                            ),
+                                  Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceEvenly,
+                                    children: [
+                                      Text(
+                                        "Email",
+                                        style: GoogleFonts.montserrat(
+                                          textStyle: const TextStyle(
+                                            fontWeight: FontWeight.w300,
+                                            fontSize: 13,
                                           ),
                                         ),
-                                      ],
-                                    ),
+                                      ),
+                                      Text(
+                                        "hilmy.ammar21@ui.ac.id",
+                                        style: GoogleFonts.montserrat(
+                                          textStyle: const TextStyle(
+                                            fontWeight: FontWeight.w600,
+                                            fontSize: 14,
+                                          ),
+                                        ),
+                                      )
+                                    ],
                                   ),
                                   Divider(
                                     color: Color(0xFF00537a),
-                                    thickness: 2,
+                                    thickness: 1,
                                   ),
-                                  Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                      children: [
-                                        Icon(Icons.local_activity_rounded),
-                                        Text(
-                                          "Study, Go to cinema, Playing games",
-                                          style: GoogleFonts.montserrat(
-                                            textStyle: const TextStyle(
-                                              fontWeight: FontWeight.w400,
-                                              fontSize: 12,
-                                            ),
+                                  Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceEvenly,
+                                    children: [
+                                      Text(
+                                        "Phone Number",
+                                        style: GoogleFonts.montserrat(
+                                          textStyle: const TextStyle(
+                                            fontWeight: FontWeight.w300,
+                                            fontSize: 13,
                                           ),
                                         ),
-                                      ],
-                                    ),
+                                      ),
+                                      Text(
+                                        "0811-2873-9278",
+                                        style: GoogleFonts.montserrat(
+                                          textStyle: const TextStyle(
+                                            fontWeight: FontWeight.w600,
+                                            fontSize: 14,
+                                          ),
+                                        ),
+                                      )
+                                    ],
                                   ),
                                   Divider(
                                     color: Color(0xFF00537a),
-                                    thickness: 2,
+                                    thickness: 1,
                                   ),
-                                  Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                      children: [
-                                        Icon(Icons.phone),
-                                        Text(
-                                          "0111-6783-2349",
-                                          style: GoogleFonts.montserrat(
-                                            textStyle: const TextStyle(
-                                              fontWeight: FontWeight.w400,
-                                              fontSize: 12,
-                                            ),
+                                  Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceEvenly,
+                                    children: [
+                                      Text(
+                                        "Hobbies",
+                                        style: GoogleFonts.montserrat(
+                                          textStyle: const TextStyle(
+                                            fontWeight: FontWeight.w300,
+                                            fontSize: 13,
                                           ),
                                         ),
-                                      ],
-                                    ),
+                                      ),
+                                      Text(
+                                        "Playing video games, Watching Cinema",
+                                        style: GoogleFonts.montserrat(
+                                          textStyle: const TextStyle(
+                                            fontWeight: FontWeight.w600,
+                                            fontSize: 14,
+                                          ),
+                                        ),
+                                      )
+                                    ],
                                   ),
                                   Divider(
                                     color: Color(0xFF00537a),
-                                    thickness: 2,
+                                    thickness: 1,
                                   ),
-                                  Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                      children: [
-                                        FaIcon(FontAwesomeIcons.instagram),
-                                        Text(
-                                          "@hilmyammarr",
-                                          style: GoogleFonts.montserrat(
-                                            textStyle: const TextStyle(
-                                              fontWeight: FontWeight.w400,
-                                              fontSize: 12,
-                                            ),
+                                  Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceEvenly,
+                                    children: [
+                                      Text(
+                                        "Major",
+                                        style: GoogleFonts.montserrat(
+                                          textStyle: const TextStyle(
+                                            fontWeight: FontWeight.w300,
+                                            fontSize: 13,
                                           ),
                                         ),
-                                      ],
-                                    ),
+                                      ),
+                                      Text(
+                                        "Computer Science",
+                                        style: GoogleFonts.montserrat(
+                                          textStyle: const TextStyle(
+                                            fontWeight: FontWeight.w600,
+                                            fontSize: 14,
+                                          ),
+                                        ),
+                                      )
+                                    ],
                                   ),
                                   Divider(
                                     color: Color(0xFF00537a),
-                                    thickness: 2,
+                                    thickness: 1,
                                   ),
                                 ],
                               ),
